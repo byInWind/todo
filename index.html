@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TodoMVC</title>
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/index.css">
+</head>
+<body ng-app="todoApp" ng-controller="toCtrl">
+<section class="todoapp">
+  <header class="header">
+    <h1>todos</h1>
+    <!-- ---------------------------只能是$event-->
+    <input ng-model="task" ng-keyup="addTask($event)" class="new-todo" placeholder="What needs to be done?" autofocus>
+  </header>
+  <!-- This section should be hidden by default and shown when there are todos -->
+  <section class="main">
+    <input class="toggle-all" type="checkbox" ng-click="changeStatus()" ng-model="status">
+    <label for="toggle-all">Mark all as complete</label>
+    <ul class="todo-list">
+      <!-- These are here just to show the structure of the list items -->
+      <!-- List items shou[ld get the class `editing` when editing and `completed` when marked as completed -->
+      <li ng-repeat="item in tasklist | filter:{isCompleted:condition}" ng-class="{'completed':item.isCompleted,'editing':item.isEditing}">
+        <div class="view">
+          <input ng-click="updateStatus()" class="toggle" type="checkbox" ng-model="item.isCompleted">
+          <label ng-dblclick="edit(item)" ng-bind="item.name"></label>
+          <button class="destroy" ng-click="destroy(item)"></button>
+        </div>
+        <input class="edit" ng-model="item.name" ng-blur="cancelModify(item)" auto-focus>
+      </li>
+    </ul>
+  </section>
+  <!-- This footer should hidden by default and shown when there are todos -->
+  <footer class="footer">
+    <!-- This should be `0 items left` by default -->
+    <span class="todo-count"><strong>{{ unCompletedTasks() }}</strong> 个未完成</span>
+    <!-- Remove this if you don't implement routing -->
+    <ul class="filters">
+      <li>
+        <!-- ------------------------------------------去掉''all是变量-->
+        <a ng-class="{'selected':isSelected=='all'}" ng-click="filterTask('all')" href="#/">所有</a>
+      </li>
+      <li>
+        <a ng-class="{'selected':isSelected=='active'}" ng-click="filterTask('active')" href="#/active">Active</a>
+      </li>
+      <li>
+        <a ng-class="{'selected':isSelected=='completed'}" ng-click="filterTask('completed')" href="#/completed">Completed</a>
+      </li>
+    </ul>
+    <!-- Hidden if no completed items are left ↓ -->
+    <button ng-show="ctrlShow()" ng-click="clear()" class="clear-completed">清空已完成</button>
+  </footer>
+</section>
+<script src="assets/js/angular.min.js"></script>
+<script src="assets/js/toapp.js"></script>
+</body>
+</html>
